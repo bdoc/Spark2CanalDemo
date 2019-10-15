@@ -1,0 +1,19 @@
+#!/bin/bash
+
+export SPARK_MAJOR_VERSION=2
+
+#--num-executors 2 \
+#--driver-memory 1g \
+#--executor-memory 1g \
+#--executor-cores 1 \
+#--files /usr/hdp/current/spark-client/conf/hive-site.xml \    
+#--jars path/file.jar
+
+spark-submit --master yarn \
+--deploy-mode client \
+--class com.bdiiot.spark.streaming.DirectKafkaWordCount \
+--conf "spark.executor.extraJavaOptions=-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf" \
+spark2-canal-demo-1.0-SNAPSHOT.jar \
+"bigdata.t01.58btc.com:6667,bigdata.t02.58btc.com:6667,bigdata.t03.58btc.com:6667" \
+"test_console-consumer" \
+"test_console"
