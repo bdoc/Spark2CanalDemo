@@ -44,11 +44,22 @@ object StructuredKafka {
       .toDF("key", "data")
 
     import scala.concurrent.duration._
-    val job1 = allTableInfo
+    // output to console
+//    val job1 = allTableInfo
+//      .writeStream
+//      .trigger(Trigger.ProcessingTime(10.seconds))
+//      .format("console")
+//      .option("checkpointLocation", Global.PATH_CHECKPOINT + "mysql2ods")
+//      .start()
+
+    // output to hdfs
+    val job2 = allTableInfo
       .writeStream
-      .trigger(Trigger.ProcessingTime(10.seconds))
-      .format("console")
+      .trigger(Trigger.ProcessingTime(30.seconds))
+      .format("text")
+      .option("path", Global.PATH_SINK)
       .option("checkpointLocation", Global.PATH_CHECKPOINT + "mysql2ods")
+      .partitionBy("key")
       .start()
 
     SparkHelper.close
