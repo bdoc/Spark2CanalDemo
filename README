@@ -3,6 +3,10 @@ SparkStreaming as Consumer to subscribe the topics that Canal has published to K
 
 Reference
 
+Structured Streaming
+Kafka option 'group.id' is not supported as user-specified consumer groups are not used to track offsets.
+https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html#kafka-specific-configurations
+
 SparkStreaming Kafka Kerberized
 1. kinit -kt ...
 2. scp kafka_client_jaas.conf to all nodes

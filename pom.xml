@@ -9,9 +9,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <spark.version>2.4.0</spark.version>
+        <spark.version>2.3.0</spark.version>
         <scala.version>2.11</scala.version>
         <hadoop.version>2.7.3</hadoop.version>
+        <fastjson.version>1.2.47</fastjson.version>
     </properties>
 
     <dependencies>
@@ -25,9 +26,16 @@
             <artifactId>spark-streaming_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
+        <!-- DirectKafkaWordCount -->
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-kafka-0-10_${scala.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <!-- StructuredKafka -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql-kafka-0-10_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
         <dependency>
@@ -49,6 +57,11 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <version>${hadoop.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
 
     </dependencies>

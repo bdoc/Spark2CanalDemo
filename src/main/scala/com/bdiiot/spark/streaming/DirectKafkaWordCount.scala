@@ -1,7 +1,6 @@
 package com.bdiiot.spark.streaming
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.common.security.auth.SecurityProtocol
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
@@ -28,7 +27,7 @@ object DirectKafkaWordCount {
 
     val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount")
     val ssc = new StreamingContext(sparkConf, Seconds(2))
-    
+
 
     val kafkaParams = Map[String, Object](
       ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> brokers,
@@ -37,7 +36,7 @@ object DirectKafkaWordCount {
       ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG -> (false: java.lang.Boolean),
       ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
       ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
-      "security.protocol" -> SecurityProtocol.SASL_PLAINTEXT.name
+      "security.protocol" -> "SASL_PLAINTEXT"
     )
 
     val messages = KafkaUtils.createDirectStream[String, String](ssc,
