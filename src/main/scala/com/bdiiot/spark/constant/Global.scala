@@ -17,6 +17,7 @@ object Global {
   final val TRUE = true
   final val FALSE = false
   final val LEFT_OUTER = "left_outer"
+  final val LEFT_ANTI = "left_anti"
   final val REPARTITION = 3
   final val HIVE_SOURCE = "hive"
   final val KAFKA_SOURCE = "kafka"

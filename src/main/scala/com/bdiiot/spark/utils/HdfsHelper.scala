@@ -64,7 +64,6 @@ object HdfsHelper {
   def apply(path: String): HdfsHelper = new HdfsHelper(path)
 
   def deleteFromFiles(fileNames: Array[String], hiveTable: String): Unit = {
-
     try {
       val deleteData = JsonHelper.json2Frame(fileNames)
       println("deleteData")
@@ -75,16 +74,9 @@ object HdfsHelper {
       println("oldData")
       oldData.show()
 
-      //      val sumData = oldData
-      //        .join(deleteData, Seq(COL_COMMON_KEY), LEFT_OUTER)
-      //        //.where(deleteData(COL_COMMON_KEY).isNull)
-      //        .select(oldData("*"))
-      //      println("sumData")
-      //      sumData.show()
-      oldData.createTempView("oldData")
-      deleteData.createTempView("deleteData")
-
-      val sumData = sparkSession.sql("select o.* from oldData o left join deleteData d on o.id=d.id where d.id is null")
+      val sumData = oldData
+        .join(deleteData, Seq(COL_COMMON_KEY), LEFT_ANTI)
+        .select(oldData("*"))
       println("sumData")
       sumData.show()
 
@@ -102,8 +94,6 @@ object HdfsHelper {
   }
 
   def updateFromFiles(fileNames: Array[String], hiveTable: String): Unit = {
-
-
     try {
       val updatedData = JsonHelper.json2Frame(fileNames)
         .withColumn(COL_FLAG_KEY,
