@@ -75,13 +75,16 @@ object HdfsHelper {
       println("oldData")
       oldData.show()
 
-      val sumData = oldData
-        .union(deleteData)
-        .withColumn(COL_FLAG_KEY,
-          row_number().over(Window.partitionBy(COL_COMMON_KEY).orderBy(col(COL_COMMON_KEY) desc)))
-        .where(col(COL_FLAG_KEY).===(1))
-        .drop(COL_FLAG_KEY)
-        .select(oldData("*"))
+      //      val sumData = oldData
+      //        .join(deleteData, Seq(COL_COMMON_KEY), LEFT_OUTER)
+      //        //.where(deleteData(COL_COMMON_KEY).isNull)
+      //        .select(oldData("*"))
+      //      println("sumData")
+      //      sumData.show()
+      oldData.createTempView("oldData")
+      deleteData.createTempView("deleteData")
+
+      val sumData = sparkSession.sql("select o.* from oldData o left join deleteData d on o.id=d.id where d.id is null")
       println("sumData")
       sumData.show()
 
