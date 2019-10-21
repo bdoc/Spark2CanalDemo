@@ -29,10 +29,10 @@ class HdfsHelper(pathStr: String) {
         .map(fileStatus => fileStatus.getPath.toString)
       fileNames.foreach(println)
 
-      // key=(database)-(table)-(type)
+      // key=(database)-(table)-(sort)-(type)
       val tableInfos = dirPath.getName.substring(4).split("-")
       if (tableInfos(0).equals("none") || tableInfos(1).equals("none")) {
-        tableInfos(2) = "none"
+        tableInfos(3) = "none"
       }
       val hiveTable = new StringBuilder("canal.")
         .append(tableInfos(0))
@@ -41,11 +41,11 @@ class HdfsHelper(pathStr: String) {
         .toString()
       println(hiveTable)
 
-      if (tableInfos(2) == "INSERT") {
+      if (tableInfos(3) == "INSERT") {
         JsonHelper.json2Hive(fileNames, hiveTable)
-      } else if (tableInfos(2) == "UPDATE") {
+      } else if (tableInfos(3) == "UPDATE") {
         updateFromFiles(fileNames, hiveTable)
-      } else if (tableInfos(2) == "DELETE") {
+      } else if (tableInfos(3) == "DELETE") {
         deleteFromFiles(fileNames, hiveTable)
       } else {
         getFileSystem().mkdirs(new Path(PATH_INVALID))

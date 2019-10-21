@@ -44,10 +44,20 @@ object JsonHelper {
         if (temp == null) "none" else temp
       }
 
-      val key = new StringBuilder()
+      val stringBuilder = new StringBuilder()
         .append(database).append("-")
         .append(table).append("-")
-        .append(sqlType).toString()
+
+      if (sqlType == "INSERT") {
+        stringBuilder.append("A-").append(sqlType)
+      } else if (sqlType == "UPDATE") {
+        stringBuilder.append("B-").append(sqlType)
+      } else if (sqlType == "DELETE") {
+        stringBuilder.append("C-").append(sqlType)
+      } else {
+        stringBuilder.append("D-").append(sqlType)
+      }
+      val key = stringBuilder.toString()
 
       val dataArray = map.getJSONArray(DATA)
       if (dataArray == null) {
