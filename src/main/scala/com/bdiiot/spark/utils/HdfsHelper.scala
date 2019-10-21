@@ -76,14 +76,15 @@ object HdfsHelper {
 
   def deleteFromFiles(fileNames: Array[String], hiveTable: String): Unit = {
     try {
-      val deleteData = JsonHelper.json2Frame(fileNames)
-      println("deleteData")
-      deleteData.show()
-
       val sparkSession = SparkHelper.getSparkSession()
       val oldData = sparkSession.read.table(hiveTable)
       println("oldData")
       oldData.show()
+
+      val deleteData = JsonHelper.json2Frame(fileNames)
+        .select(oldData.columns.head, oldData.columns.tail: _*)
+      println("deleteData")
+      deleteData.show()
 
       val sumData = oldData
         .join(deleteData, Seq(COL_COMMON_KEY), LEFT_ANTI)
@@ -106,18 +107,19 @@ object HdfsHelper {
 
   def updateFromFiles(fileNames: Array[String], hiveTable: String): Unit = {
     try {
+      val sparkSession = SparkHelper.getSparkSession()
+      val oldData = sparkSession.read.table(hiveTable)
+      println("oldData")
+      oldData.show()
+
       val updatedData = JsonHelper.json2Frame(fileNames)
         .withColumn(COL_FLAG_KEY,
           row_number().over(Window.partitionBy(COL_COMMON_KEY).orderBy(col(COL_COMMON_UPDATE_TIME) desc)))
         .where(col(COL_FLAG_KEY).===(1))
         .drop(COL_FLAG_KEY)
+        .select(oldData.columns.head, oldData.columns.tail: _*)
       println("updatedData")
       updatedData.show()
-
-      val sparkSession = SparkHelper.getSparkSession()
-      val oldData = sparkSession.read.table(hiveTable)
-      println("oldData")
-      oldData.show()
 
       val sumData = oldData
         .join(updatedData, Seq(COL_COMMON_KEY), LEFT_OUTER)
