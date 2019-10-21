@@ -8,6 +8,9 @@ object Global {
   final val COL_FLAG_KEY = "flag"
   final val COL_COMMON_UPDATE_TIME = "modify_date"
 
+  final val DB_NAME = "canal"
+  final val DB_MARK = "_bd_"
+
   final val DATABASE = "database"
   final val TABLE = "table"
   final val TYPE = "type"

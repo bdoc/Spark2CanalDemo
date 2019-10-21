@@ -34,22 +34,33 @@ class HdfsHelper(pathStr: String) {
       if (tableInfos(0).equals("none") || tableInfos(1).equals("none")) {
         tableInfos(3) = "none"
       }
-      val hiveTable = new StringBuilder("canal.")
-        .append(tableInfos(0))
-        .append("_bd_")
+      val hiveTable = new StringBuilder(tableInfos(0))
+        .append(DB_MARK)
         .append(tableInfos(1))
         .toString()
-      println(hiveTable)
 
-      if (tableInfos(3) == "INSERT") {
-        JsonHelper.json2Hive(fileNames, hiveTable)
-      } else if (tableInfos(3) == "UPDATE") {
-        updateFromFiles(fileNames, hiveTable)
-      } else if (tableInfos(3) == "DELETE") {
-        deleteFromFiles(fileNames, hiveTable)
+      val ifTableExists = SparkHelper.getSparkSession()
+        .sql(s"show tables in $DB_NAME")
+        .toDF("database", "tableName", "isTemporary")
+        .where(col("tableName") === hiveTable)
+        .count().equals(1L)
+
+      val fullTableName = DB_NAME.concat(".").concat(hiveTable)
+      println(fullTableName)
+
+      if (ifTableExists) {
+        if (tableInfos(3) == "INSERT") {
+          JsonHelper.json2Hive(fileNames, fullTableName)
+        } else if (tableInfos(3) == "UPDATE") {
+          updateFromFiles(fileNames, fullTableName)
+        } else if (tableInfos(3) == "DELETE") {
+          deleteFromFiles(fileNames, fullTableName)
+        } else {
+          getFileSystem().mkdirs(new Path(PATH_INVALID))
+          getFileSystem().rename(dirPath, new Path(PATH_INVALID, dirPath.getName))
+        }
       } else {
-        getFileSystem().mkdirs(new Path(PATH_INVALID))
-        getFileSystem().rename(dirPath, new Path(PATH_INVALID, dirPath.getName))
+        println(fullTableName.concat(" is not exists!"))
       }
 
       delIfExists(dir.getPath)
