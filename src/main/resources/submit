@@ -1,19 +1,40 @@
 #!/bin/bash
 
+# auto.offset.reset [latest, earliest, none]
+# kafka.security [PLAINTEXT, SASL_PLAINTEXT]
+
+hadoop fs -rm -r -f /tmp/{checkpoint,mysql2ods}
+
 export SPARK_MAJOR_VERSION=2
 
+spark-submit \
+--master yarn \
+--deploy-mode client \
+--conf "spark.executor.extraJavaOptions=-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf" \
+--class com.bdiiot.spark.streaming.StructuredKafka \
+spark2-canal-demo-1.0-SNAPSHOT.jar \
+"192.168.112.222:9092" \
+"mysql_canal_to_ods" \
+"latest" \
+"PLAINTEXT"
+
+#"bigdata.t02.58btc.com:9092" \
+#"test_canal4" \
+#"earliest" \
+
+#"192.168.112.222:9092" \
+#"mysql_canal_to_ods" \
+#"latest" \
+
+#"192.168.112.222:9092" \
+#"mysql_canal_to_ods" \
+#"bigdata.t01.58btc.com:6667,bigdata.t02.58btc.com:6667,bigdata.t03.58btc.com:6667" \
+#"test_console" \
+
+#--master local[*] \
 #--num-executors 2 \
 #--driver-memory 1g \
 #--executor-memory 1g \
 #--executor-cores 1 \
-#--files /usr/hdp/current/spark-client/conf/hive-site.xml \    
-#--jars path/file.jar
-
-spark-submit --master yarn \
---deploy-mode client \
---class com.bdiiot.spark.streaming.DirectKafkaWordCount \
---conf "spark.executor.extraJavaOptions=-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf" \
-spark2-canal-demo-1.0-SNAPSHOT.jar \
-"bigdata.t01.58btc.com:6667,bigdata.t02.58btc.com:6667,bigdata.t03.58btc.com:6667" \
-"test_console-consumer" \
-"test_console"
+#--files /usr/hdp/current/spark-client/conf/hive-site.xml \
+#--jars /usr/hdp/current/spark-client/lib/datanucleus-api-jdo-3.2.6.jar,/usr/hdp/current/spark-client/lib/datanucleus-rdbms-3.2.9.jar,/usr/hdp/current/spark-client/lib/datanucleus-core-3.2.10.jar,target/SparkSample-1.0-SNAPSHOT.jar
