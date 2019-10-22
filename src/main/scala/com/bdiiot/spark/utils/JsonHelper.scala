@@ -3,6 +3,8 @@ package com.bdiiot.spark.utils
 import com.alibaba.fastjson.JSON
 import com.bdiiot.spark.constant.Global._
 import org.apache.spark.sql.SaveMode
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.StringType
 
 import scala.collection.mutable.ListBuffer
 
@@ -76,14 +78,33 @@ object JsonHelper {
     }
   }
 
-  def json2Frame(fileNames: Seq[String]) = {
+  def json2Frame(fileNames: Seq[String], hiveTable: String) = {
     val sparkSession = SparkHelper.getSparkSession()
-    sparkSession.read.json(fileNames: _*)
+    var readJson = sparkSession.read.json(fileNames: _*)
+    val tableColumns = sparkSession.read.table(hiveTable).columns
+    val jsonColumns = readJson.columns
+
+    val tableColumn_ = tableColumns
+    val jsonColumns_ = jsonColumns
+    println("tableColumns_: ".concat(tableColumn_.mkString(",")))
+    println("jsonColumns_: ".concat(jsonColumns_.mkString(",")))
+
+    for (columns <- tableColumns) {
+      if (!jsonColumns.contains(columns)) {
+        println("columns: ".concat(columns))
+        readJson = readJson.withColumn(columns, lit(null: String).cast(StringType))
+        println("----------------")
+      }
+    }
+    println("jsonColumns: ".concat(readJson.columns.mkString(",")))
+    println("==================")
+
+    readJson.select(tableColumns.head, tableColumns.tail: _*)
   }
 
   def json2Hive(fileNames: Seq[String], hiveTable: String): Unit = {
     try {
-      json2Frame(fileNames)
+      json2Frame(fileNames, hiveTable)
         .repartition(REPARTITION)
         .write.format(HIVE_SOURCE)
         .mode(SaveMode.Append)

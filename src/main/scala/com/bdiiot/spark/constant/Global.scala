@@ -4,12 +4,16 @@ class Global {
 }
 
 object Global {
-  final val COL_COMMON_KEY = "id"
-  final val COL_FLAG_KEY = "flag"
-  final val COL_COMMON_UPDATE_TIME = "modify_date"
+  final val BD_KEY = "database_name"
+  final val TABLE_KEY = "table_name"
+  final val CREATE_TIME_KEY = "created_date"
+  final val UPDATE_TIME_KEY = "modified_date"
+  final val PRIMARY_KEY = "primary_key"
+  final val FLAG_KEY = "flag"
 
-  final val DB_NAME = "canal"
+  final val DB_NAME = "ods"
   final val DB_MARK = "_bd_"
+  final val DB_TABLE = "test.table_columns"
 
   final val DATABASE = "database"
   final val TABLE = "table"
