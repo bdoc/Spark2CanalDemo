@@ -1,0 +1,12 @@
+{"type":"INSERT","database":"test","table":"test_canal","data":[{"id":1,"name":"a1","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 14:00:00"}]}
+{"type":"INSERT","database":"test","table":"test_canal","data":[{"id":2,"name":"b2","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 14:00:00"}]}
+{"type":"INSERT","database":"test","table":"test_canal","data":[{"id":3,"name":"c3","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 14:00:00"}]}
+{"type":"INSERT","database":"test","table":"test_canal","data":[{"id":4,"name":"d4","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 14:00:00"}]}
+{"type":"INSERT","database":"test","table":"test_canal","data":[{"id":5,"name":"e5","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 14:00:00"}]}
+{"type":"INSERT","database":"test","table":"test_canal","data":[{"id":6,"name":"f6","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 14:00:00"}]}
+
+{"type":"UPDATE","database":"test","table":"test_canal","data":[{"id":4,"name":"4d","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 15:00:00"}]}
+{"type":"UPDATE","database":"test","table":"test_canal","data":[{"id":5,"name":"5e","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 15:00:00"}]}
+{"type":"UPDATE","database":"test","table":"test_canal","data":[{"id":6,"name":"6f","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 15:00:00"}]}
+
+{"type":"DELETE","database":"test","table":"test_canal","data":[{"id":6,"name":"6f","create_date":"2019-11-06 14:00:00","modify_date":"2019-11-06 15:00:00"}]}

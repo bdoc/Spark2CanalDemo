@@ -4,6 +4,10 @@ class Global {
 }
 
 object Global {
+  final val PHOENIX_JDBC="jdbc:phoenix:bigdata.t01.58btc.com,bigdata.t02.58btc.com,bigdata.t03.58btc.com:2181:/hbase-secure"
+  final val HBASE_TEST_TABLE="TEST:TEST_HBASE"
+  final val DEFAULT_CF="0"
+
   final val BD_KEY = "database_name"
   final val TABLE_KEY = "table_name"
   final val CREATE_TIME_KEY = "created_date"
@@ -32,7 +36,7 @@ object Global {
   final val CONSOLE_SOURCE = "console"
 
   final val HDFS = "hdfs://bigdata.t01.58btc.com"
-  final val PATH_CHECKPOINT = HDFS + "/tmp/checkpoint/"
-  final val PATH_SINK = "/tmp/mysql2ods/sink/"
-  final val PATH_INVALID = "/tmp/mysql2ods/invalid"
+  final val PATH_CHECKPOINT = HDFS + "/tmp/checkpoint_realtime/"
+  final val PATH_SINK = "/tmp/mysql_to_ods/sink/"
+  final val PATH_INVALID = "/tmp/mysql_to_ods/invalid"
 }

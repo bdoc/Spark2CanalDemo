@@ -14,10 +14,12 @@ object JsonHelper {
     var flag = false
     try {
       val map = JSON.parseObject(jsonStr)
-      if (map.containsKey(DATABASE) &&
-        map.containsKey(TABLE) &&
-        map.containsKey(TYPE) &&
-        map.containsKey(DATA)) {
+      if (
+        map.containsKey(DATABASE) &&
+          map.containsKey(TABLE) &&
+          map.containsKey(TYPE) &&
+          map.containsKey(DATA)
+      ) {
         flag = true
       }
     } catch {
@@ -28,8 +30,8 @@ object JsonHelper {
     flag
   }
 
-  def readJson(jsonStr: String): List[(String, String)] = {
-    val valueList = new ListBuffer[(String, String)]()
+  def readJson(jsonStr: String): List[(String, String, String)] = {
+    val valueList = new ListBuffer[(String, String, String)]()
     if (jsonValidate(jsonStr)) {
       val map = JSON.parseObject(jsonStr)
 
@@ -46,34 +48,21 @@ object JsonHelper {
         if (temp == null) "none" else temp
       }
 
-      val stringBuilder = new StringBuilder()
-        .append(database).append("-")
-        .append(table).append("-")
-
-      if (sqlType == "INSERT") {
-        stringBuilder.append("A-").append(sqlType)
-      } else if (sqlType == "UPDATE") {
-        stringBuilder.append("B-").append(sqlType)
-      } else if (sqlType == "DELETE") {
-        stringBuilder.append("C-").append(sqlType)
-      } else {
-        stringBuilder.append("D-").append(sqlType)
-      }
-      val key = stringBuilder.toString()
+      val tableName = "ods." + database + "_bd_" + table
 
       val dataArray = map.getJSONArray(DATA)
       if (dataArray == null) {
-        return List.empty[(String, String)]
+        return List.empty[(String, String, String)]
       }
       val it = dataArray.iterator()
 
       while (it.hasNext) {
         val eachRow = it.next().toString
-        valueList.append((key, eachRow))
+        valueList.append((tableName, sqlType, eachRow))
       }
       valueList.toList
     } else {
-      valueList.append(("invalid", jsonStr))
+      valueList.append(("invalid", "none", jsonStr))
       valueList.toList
     }
   }

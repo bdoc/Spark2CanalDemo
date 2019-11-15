@@ -3,7 +3,7 @@
 # auto.offset.reset [latest, earliest, none]
 # kafka.security [PLAINTEXT, SASL_PLAINTEXT]
 
-hadoop fs -rm -r -f /tmp/{checkpoint,mysql2ods}
+hadoop fs -rm -r -f /tmp/{checkpoint_realtime,mysql_to_ods}
 
 export SPARK_MAJOR_VERSION=2
 

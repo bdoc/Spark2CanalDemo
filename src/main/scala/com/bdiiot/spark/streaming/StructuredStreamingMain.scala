@@ -1,11 +1,15 @@
 package com.bdiiot.spark.streaming
 
 import com.bdiiot.spark.constant.Global._
-import com.bdiiot.spark.utils.{JsonHelper, SparkHelper}
+import com.bdiiot.spark.utils.SparkHelper
 import org.apache.spark.sql
-import org.apache.spark.sql.streaming.Trigger
+import org.apache.spark.sql.streaming.StreamingQueryException
 
-object StructuredKafka {
+object StructuredStreamingMain {
+  {
+
+  }
+
   def main(args: Array[String]): Unit = {
     if (args.length < 4) {
       System.err.println(
@@ -27,9 +31,6 @@ object StructuredKafka {
     }
 
     val spark = SparkHelper.getSparkSession()
-    spark.streams.addListener(SparkHelper.getStreamsListener())
-
-    import spark.implicits._
 
     val kafkaSource: sql.DataFrame = spark
       .readStream
@@ -40,35 +41,30 @@ object StructuredKafka {
       .option("startingOffsets", offsets)
       .load()
 
-    val allTableInfo = kafkaSource
-      .selectExpr("CAST(value AS STRING)")
-      .as[String]
-      .flatMap(jsonStr => {
-        JsonHelper.readJson(jsonStr)
-      })
-      .toDF(KEY, DATA)
+    import spark.implicits._
+    val kafkaSourceString = kafkaSource.selectExpr("CAST(value AS STRING)").as[String]
 
-    import scala.concurrent.duration._
     // output to console
-    //    val job1 = allTableInfo
+    //    val query = kafkaSourceString
     //      .writeStream
-    //      .trigger(Trigger.ProcessingTime(10.seconds))
     //      .format(CONSOLE_SOURCE)
-    //      .option("checkpointLocation", PATH_CHECKPOINT + "mysql2ods")
+    //      .option("checkpointLocation", PATH_CHECKPOINT + "mysql_to_ods")
     //      .start()
 
-    // output to hdfs
-    val job2 = allTableInfo
-      .writeStream
-      .trigger(Trigger.ProcessingTime(3.minutes))
-      .format(TEXT_SOURCE)
-      .option("path", PATH_SINK)
-      .option("checkpointLocation", PATH_CHECKPOINT + "mysql2ods")
-      .partitionBy(KEY)
+    val query = kafkaSourceString.writeStream
+      .foreach(ForeachWriterHbase.apply())
+      .outputMode("update")
+      .option("checkpointLocation", PATH_CHECKPOINT + "mysql_to_ods")
       .start()
 
-    SparkHelper.close
+    try {
+      query.awaitTermination()
+    } catch {
+      case e: StreamingQueryException =>
+        e.printStackTrace()
+    }
 
+    SparkHelper.close
   }
 
 }
