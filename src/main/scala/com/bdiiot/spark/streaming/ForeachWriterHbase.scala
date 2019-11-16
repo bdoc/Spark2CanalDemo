@@ -24,7 +24,7 @@ class ForeachWriterHbase() extends ForeachWriter[String] {
 
   override def process(value: String): Unit = {
     val table = hbaseConnection.getTable(TableName.valueOf(HBASE_TEST_TABLE))
-    val put = new Put("1".getBytes(CharsetNames.UTF_8))
+    val put = new Put("1".getBytes())
     put.addColumn(DEFAULT_CF.getBytes(), "NAME".getBytes(), value.getBytes())
     put.addColumn(DEFAULT_CF.getBytes(), "CREATE_DATE".getBytes(), "2019".getBytes())
     put.addColumn(DEFAULT_CF.getBytes(), "MODIFY_DATE".getBytes(), "2019".getBytes())
