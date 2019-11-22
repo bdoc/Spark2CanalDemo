@@ -1,9 +1,8 @@
 package com.bdiiot.spark.streaming
 
-import com.bdiiot.spark.constant.Global._
+import com.bdiiot.spark.utils.Constant._
 import com.bdiiot.spark.utils.SparkHelper
 import org.apache.spark.sql
-import org.apache.spark.sql.streaming.StreamingQueryException
 
 object StructuredStreamingMain {
   {
@@ -30,7 +29,7 @@ object StructuredStreamingMain {
       System.setProperty("java.security.auth.login.config", "/tmp/kafka_client_jaas.conf")
     }
 
-    val spark = SparkHelper.getSparkSession()
+    val spark = SparkHelper.getSparkSession
 
     val kafkaSource: sql.DataFrame = spark
       .readStream
@@ -52,19 +51,13 @@ object StructuredStreamingMain {
     //      .start()
 
     val query = kafkaSourceString.writeStream
-      .foreach(ForeachWriterHbase.apply())
-      .outputMode("update")
+      .foreach(ForeachWriterPhoenix.apply())
+      .outputMode(OUTPUT_MODE)
       .option("checkpointLocation", PATH_CHECKPOINT + "mysql_to_ods")
       .start()
 
-    try {
-      query.awaitTermination()
-    } catch {
-      case e: StreamingQueryException =>
-        e.printStackTrace()
-    }
-
-    SparkHelper.close
+    query.awaitTermination()
+    SparkHelper.close()
   }
 
 }

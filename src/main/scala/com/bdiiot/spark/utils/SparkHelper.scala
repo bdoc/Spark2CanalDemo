@@ -1,6 +1,5 @@
 package com.bdiiot.spark.utils
 
-import com.bdiiot.spark.constant.Global
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
@@ -8,7 +7,7 @@ object SparkHelper {
 
   private var singleSparkSession: SparkSession = _
 
-  def getSparkSession(): SparkSession = {
+  def getSparkSession: SparkSession = {
     synchronized {
       if (singleSparkSession == null) {
         val conf = new SparkConf()
@@ -18,20 +17,19 @@ object SparkHelper {
           .config(conf)
           .enableHiveSupport()
           .getOrCreate()
-        singleSparkSession.sparkContext.setCheckpointDir(Global.PATH_CHECKPOINT + "spark")
+        singleSparkSession.sparkContext.setCheckpointDir(Constant.PATH_CHECKPOINT + "spark")
       }
     }
     singleSparkSession
   }
 
-  def close: Unit = {
+  def close(): Unit = {
     if (singleSparkSession != null) {
       try {
         singleSparkSession.close()
       } catch {
-        case ex: Exception => {
+        case ex: Exception =>
           println(s"close singled sparksession failed, msg=$ex")
-        }
       }
     }
   }

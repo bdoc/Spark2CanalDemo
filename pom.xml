@@ -9,14 +9,16 @@
     <version>2.0</version>
 
     <properties>
+        <hadoop.version>2.7.3</hadoop.version>
         <spark.version>2.3.0</spark.version>
         <scala.version>2.11</scala.version>
-        <hadoop.version>2.7.3</hadoop.version>
+        <phoenix.version>4.7.0</phoenix.version>
         <hbase.version>1.1.2</hbase.version>
         <fastjson.version>1.2.47</fastjson.version>
     </properties>
 
     <dependencies>
+        <!-- phoenix -->
         <dependency>
             <groupId>sqlline</groupId>
             <artifactId>sqlline</artifactId>
@@ -26,11 +28,23 @@
         <dependency>
             <groupId>org.apache.phoenix</groupId>
             <artifactId>phoenix-core</artifactId>
-            <version>4.6.0-HBase-1.1</version>
+            <version>${phoenix.version}-HBase-1.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+        <!-- spark -->
+        <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${scala.version}</artifactId>
+            <artifactId>spark-sql-kafka-0-10_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
         <dependency>
@@ -40,30 +54,14 @@
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql-kafka-0-10_${scala.version}</artifactId>
-            <version>${spark.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-hive_${scala.version}</artifactId>
+            <artifactId>spark-core_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>

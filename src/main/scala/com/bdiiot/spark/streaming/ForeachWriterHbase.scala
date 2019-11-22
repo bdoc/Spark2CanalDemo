@@ -1,8 +1,7 @@
 package com.bdiiot.spark.streaming
 
-import com.bdiiot.spark.constant.Global._
+import com.bdiiot.spark.utils.Constant._
 import com.bdiiot.spark.utils.HbaseHelper
-import org.apache.commons.compress.utils.CharsetNames
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.{Connection, Put}
 import org.apache.spark.sql.ForeachWriter
