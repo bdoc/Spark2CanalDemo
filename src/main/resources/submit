@@ -12,8 +12,9 @@ export SPARK_MAJOR_VERSION=2
 spark-submit \
 --master yarn \
 --deploy-mode client \
+--files "/etc/hbase/conf/hbase-site.xml" \
 --jars "/usr/hdp/current/phoenix-client/phoenix-client.jar" \
---class com.bdiiot.spark.streaming.StructuredStreamingMain \
+--class com.bdiiot.spark.streaming.SparkPhoenixMain \
 spark2-canal-demo-2.0.jar \
 "bigdata.t02.58btc.com:9092" \
 "test_canal" \

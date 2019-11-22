@@ -5,14 +5,14 @@ import java.sql.{Connection, Statement}
 import com.bdiiot.spark.utils.PhoenixHelper
 import org.apache.spark.sql.ForeachWriter
 
-object ForeachWriterPhoenix {
+object PhoenixForeachWriter {
 
   def apply(): ForeachWriter[String] = {
-    new ForeachWriterPhoenix()
+    new PhoenixForeachWriter()
   }
 }
 
-class ForeachWriterPhoenix() extends ForeachWriter[String] {
+class PhoenixForeachWriter() extends ForeachWriter[String] {
   private var connection: Connection = _
   private var statement: Statement = _
 
@@ -23,7 +23,7 @@ class ForeachWriterPhoenix() extends ForeachWriter[String] {
   }
 
   override def process(value: String): Unit = {
-    val sql: String = s"upsert into test.test_hive values (1, 'a', '2019-11-11 00:00:00', '2019-11-13 00:00:00'"
+    val sql: String = s"upsert into test.test_hive values (1, 'a', '2019-11-11 00:00:00', '2019-11-13 00:00:00')"
     statement.execute(sql)
     connection.commit()
   }

@@ -4,7 +4,7 @@ import com.bdiiot.spark.utils.Constant._
 import com.bdiiot.spark.utils.SparkHelper
 import org.apache.spark.sql
 
-object StructuredStreamingMain {
+object SparkPhoenixMain {
   {
 
   }
@@ -51,7 +51,7 @@ object StructuredStreamingMain {
     //      .start()
 
     val query = kafkaSourceString.writeStream
-      .foreach(ForeachWriterPhoenix.apply())
+      .foreach(PhoenixForeachWriter.apply())
       .outputMode(OUTPUT_MODE)
       .option("checkpointLocation", PATH_CHECKPOINT + "mysql_to_ods")
       .start()
